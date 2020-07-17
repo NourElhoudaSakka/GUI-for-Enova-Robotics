@@ -1,15 +1,17 @@
 from tkinter import *
-'''
+from tkinter import ttk
+
 import mysql.connector
 
-robot_db = mysql.connector.connect(host="localhost", user="yourusername", password="yourpassword")
+robot_db = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "EnovaRobotics123", port = 3306, database = "fiches_robot_bd")
 
 cursor = robot_db.cursor()
 
-cursor.execute("CREATE TABLE fiche_config (S/N Robot VARCHAR(50), Nom du module VARCHAR(50), Reference interne du module VARCHAR(50), Adresse IP : Port(par defaut) VARCHAR(50), Mot de passe (par defaut) VARCHAR(50), Adresee IP: Port (modifiée) VARCHAR(50), Mot de passe (modifié) VARCHAR(50), Nom du fichier de configuration VARCHAR(50), Configuré par VARCHAR(50), Debut de configuration DATE, Fin de configuration DATE)")
-cursor.execute("CREATE TABLE fiche_install (S/N Robot VARCHAR(50), Nom du PC VARCHAR(50), Nom de l'image VARCHAR(50), Reference PC  VARCHAR(50), Taille du disque en Go VARCHAR(50), Date du document VARCHAR(50), Installé par VARCHAR(50), Vérifié par VARCHAR(50), Debut d'installation DATE, Fin d'installation DATE)")
-cursor.execute("CREATE TABLE fiche_fab (Nom du sous système VARCHAR(50), Reference du sous système VARCHAR(50), S/N Robot VARCHAR(50), Date du document VARCHAR(50), Fabriqué par VARCHAR(50), Vérifié par VARCHAR(50), Debut de fabrication DATE, Fin de fabrication DATE)")
-'''
+#cursor.execute("CREATE TABLE fiche_config (SN_Robot VARCHAR(50), Nom_du_module VARCHAR(50), Reference_interne_du_module VARCHAR(50), Adresse_IP_Port_par_defaut VARCHAR(50), Mot_de_passe_par_defaut VARCHAR(50), Adresee_IP_Port_modifiée VARCHAR(50), Mot_de_passe_modifié VARCHAR(50), Nom_du_fichier_de_configuration VARCHAR(50), Configuré_par VARCHAR(50), Debut_de_configuration DATE, Fin_de_configuration DATE)")
+#cursor.execute("CREATE TABLE fiche_install (SN_Robot VARCHAR(50), Nom_du_PC VARCHAR(50), Nom_de_limage VARCHAR(50), Reference_PC  VARCHAR(50), Taille_du_disque_en_Go VARCHAR(50), Date_du_document VARCHAR(50), Installé_par VARCHAR(50), Vérifié_par VARCHAR(50), Debut_dinstallation DATE, Fin_d_installation DATE)")
+#cursor.execute("CREATE TABLE fiche_fab (Nom_du_sous_système VARCHAR(50), Reference_du_sous_système VARCHAR(50), SN_Robot VARCHAR(50), Date_du_document VARCHAR(50), Fabriqué_par VARCHAR(50), Vérifié_par VARCHAR(50), Debut_de_fabrication DATE, Fin_de_fabrication DATE)")
+
+
 class Window:
 	'''
 	parent class
@@ -45,39 +47,49 @@ class Window:
 		self.entry.grid(row = r, column = c)
 		return self.entry
 
-	def listbox(self, master, mode, r, c):
-		self.listbox = Listbox(self.master, selectmode = mode)
-		self.listbox.grid(row = r, column = c)
-		return self.listbox
+	def combobox(self, master, val, r, c):
+		self.combobox = ttk.Combobox(self.master, values = val)
+		self.combobox.pack(padx = r, pady = c)
+		return self.combobox
 
 
 def config_window():
-	#s_n, name, ref, ip_d, password_d, ip_m, password_m, fiche_name, configured, begin, end = StringVar()
+	s_n = StringVar()
+	name = StringVar()
+	ref = StringVar()
+	ip_d = StringVar()
+	password_d = StringVar()
+	ip_m = StringVar()
+	password_m = StringVar()
+	fiche_name = StringVar()
+	configured = StringVar()
+	begin = StringVar()
+	end = StringVar()
+	
 	config_root = Tk()
 	ConfigWindow = Window(config_root)
 	config_root.title('Fiche de configuration')
 	
-	list = Window.listbox(ConfigWindow, config_root, BROWSE, 0, 0)
+	values = ["2 x 180 vue panoramique", "Caméra optique", "Caméra thermique", "Module 4G", "Lidar 3D", "WiFi", "Microphone", "Haut-parleur", "GPS", "Régulateur de température", "IP 54 housing", "ATV Tires"]
+	combo = Window.combobox(ConfigWindow, config_root, values, 2, 5)
+	
+	choice_frame = Window.frame(ConfigWindow, config_root, 'peach puff', 2, GROOVE, TOP, 2, 10)
+	choice_label = Window.label(ConfigWindow, choice_frame, 1, 30, print(combo.get()), 'gray1', 'turquoise4', W, 5, 0)
 
-	for item in ["2 x 180 vue panoramique", "Caméra optique", "Caméra thermique", "Module 4G", "Lidar 3D", "WiFi", "Microphone", "Haut-parleur", "GPS", "Régulateur de température", "IP 54 housing", "ATV Tires"]:
-		list.insert(END, item)
+	frame1 = Window.frame(ConfigWindow, config_root, 'peach puff', 2, GROOVE, TOP, 2, 15)
+	frame2 = Window.frame(ConfigWindow, config_root, 'peach puff', 2, GROOVE, TOP, 2, 30)
 
-	choice_label = Window.label(ConfigWindow, config_root, 1, 30, list.curselection(), 'gray1', 'turquoise4', W, 5, 0)
+	s_n_label = Window.label(ConfigWindow, frame1, 1, 30, 'S N robot:', 'bisque4', 'peach puff', W, 0, 0)
+	module_name_label = Window.label(ConfigWindow, frame1, 1, 30, 'Nom du module:', 'bisque4', 'peach puff', W, 1, 0)
+	module_ref_label = Window.label(ConfigWindow, frame1, 1, 30, 'Reference interne module:', 'bisque4', 'peach puff', W, 2, 0)
+	ip_adress_label = Window.label(ConfigWindow, frame1, 1, 30, 'Adresse IP : Port (par defaut):', 'bisque4', 'peach puff', W, 3, 0)
+	password_label = Window.label(ConfigWindow, frame1, 1, 30, 'Mot de passe (par defaut):', 'bisque4', 'peach puff', W, 4, 0)
 
-	frame1 = Window.frame(ConfigWindow, config_root, 'peach puff', 2, GROOVE, BOTTOM, 0, 0)
-	frame2 = Window.frame(ConfigWindow, config_root, 'peach puff', 2, GROOVE, BOTTOM, 0, 0)
-
-	s_n_label = Window.label(ConfigWindow, frame1, 1, 30, 'S N robot:', 'bisque4', 'peach puff', W, 6, 0)
-	module_name_label = Window.label(ConfigWindow, frame1, 1, 30, 'Nom du module:', 'bisque4', 'peach puff', W, 7, 0)
-	module_ref_label = Window.label(ConfigWindow, frame1, 1, 30, 'Reference interne module:', 'bisque4', 'peach puff', W, 8, 0)
-	ip_adress_label = Window.label(ConfigWindow, frame1, 1, 30, 'Adresse IP : Port (par defaut):', 'bisque4', 'peach puff', W, 9, 0)
-	password_label = Window.label(ConfigWindow, frame1, 1, 30, 'Mot de passe (par defaut):', 'bisque4', 'peach puff', W, 10, 0)
-
-	s_n_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 6, 1, s_n)
-	module_name_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 7, 1, name)
-	module_ref_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 8, 1, ref)
-	ip_adress_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 9, 1, ip_d)
-	password_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 10, 1, password_d)
+	s_n_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 0, 1, s_n)
+	module_name_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 1, 1, name)
+	module_ref_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 2, 1, ref)
+	ip_adress_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 3, 1, ip_d)
+	password_entry = Window.entry(ConfigWindow, frame1, 50, 'old lace', CENTER, FLAT, 4, 1, password_d)
 
 
 	ip_adress_mod_label = Window.label(ConfigWindow, frame2, 1, 30, 'Adresse IP: Port (modifiée):', 'bisque4', 'peach puff', W, 0, 0)
@@ -193,31 +205,14 @@ class PrincipalWindow (Window):
 		print(self.entry1.get())
 		self.entry2 = PrincipalWindow.entry(self, self.frame2, 50, 'old lace', CENTER, FLAT, 1, 1, var2)
 
-		#self.save_button = PrincipalWindow.window_button(self, self, 'Enregistrer', self.save_or_show, 'input')
-		#self.show_button = PrincipalWindow.window_button(self, self, 'Récupérer', self.save_or_show, 'output')
+		self.save_button = PrincipalWindow.window_button(self, self, 'Enregistrer', self.save_or_show, 'input')
+		self.show_button = PrincipalWindow.window_button(self, self, 'Récupérer', self.save_or_show, 'output')
 
-		self.config_button_frame = PrincipalWindow.frame(self, self.master, 'peach puff', 2, GROOVE, TOP, 10, 11)
-		self.install_button_frame = PrincipalWindow.frame(self, self.master, 'peach puff', 2, GROOVE, TOP, 30, 11)
-		self.fab_button_frame = PrincipalWindow.frame(self, self.master, 'peach puff', 2, GROOVE, TOP, 20, 11)
-
-		self.config_button = PrincipalWindow.window_button(self, self.config_button_frame, 'Fiches de configuration', self.open, 'config')
-		self.install_button = PrincipalWindow.window_button(self, self.install_button_frame, 'Fiches d installation', self.open, 'instal')
-		self.fab_button = PrincipalWindow.window_button(self, self.fab_button_frame, 'Fiches de fabrication', self.open, 'fab')
-	
 	def window_button(self, frame, texte, com, txt):
 		self.button = Button(self.frame, text = texte, command = lambda : com(txt))
 		self.button.pack()
 		return self.button
-
-	def open(self, txt):
-		if txt == 'instal':
-			install_window()
-		elif txt == 'fab':
-			fab_window()
-		elif txt == 'config':
-			config_window()
-
-'''
+	
 	def save_or_show(self,txt):
 		if txt == 'input':
 			self.config_button_frame = PrincipalWindow.frame(self, self.master, 'peach puff', 2, GROOVE, TOP, 10, 11)
@@ -262,6 +257,6 @@ class PrincipalWindow (Window):
 					mycursor.execute("SELECT * FROM config_sql")
 				elif txt == 'fab':
 					mycursor.execute("SELECT * FROM fab_sql")
- '''
+ 
 
 	
