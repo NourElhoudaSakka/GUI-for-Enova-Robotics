@@ -1,6 +1,6 @@
 import mysql.connector
-from windows import *
-from database import *
+from nouveauwindows import *
+from nouveaudatabase import *
 
 root = Tk()
 principal_window = PrincipalWindow(root)
@@ -91,6 +91,7 @@ def install_window():
     combo.current()
 
     def callbackFunc(event):
+        print(str(combo.get()))
         choose(str(combo.get()))
 
     combo.bind("<<ComboboxSelected>>", callbackFunc)
