@@ -24,18 +24,26 @@ class Window:
         self.entry = Entry(frame, width = w, background = bg, justify = j, relief = rf) 
         self.entry.grid(row = r, column = c)
         return self.entry
-        
+    
     def button(self, master, cmd, param, x, y, txt = 'Enter'):
         self.button = Button(master, text = txt, command = lambda : cmd(param))
         self.button.pack(padx = x, pady = y)
         return self.button 
+        
+    def button1(self, master, cmd, param1, param2, x = 2, y = 45, txt = 'Entrer'):
+        self.button1 = Button(master, text = txt, command = lambda: cmd (param1, param2))
+        self.button1.pack(padx = x, pady = y)
+        return self.button1 
         
     def combobox(self, master, val = [], x = 0, y = 0, var = ''):
         self.combobox = ttk.Combobox(self.master, values = val, textvariable = var)
         self.combobox.pack(padx = x, pady = y)
         return self.combobox
 
-#class OtherWindows(Window): 
+    def combobox1(self, master, val = [], x = 0, y = 0, var = ''):
+        self.combobox = ttk.Combobox(self.master, values = val, textvariable = var)
+        self.combobox.grid(row = x, column = y)
+        return self.combobox
 	
 class PrincipalWindow (Window):
 	''' 

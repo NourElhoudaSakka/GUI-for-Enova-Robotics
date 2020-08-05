@@ -91,7 +91,6 @@ def install_window():
     combo.current()
 
     def callbackFunc(event):
-        print(str(combo.get()))
         choose(str(combo.get()))
 
     combo.bind("<<ComboboxSelected>>", callbackFunc)

@@ -1,24 +1,33 @@
 from windows import *
 import mysql.connector
 
-class bd:
-    def __init__(self):
-        self.robot_db = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "EnovaRobotics123", port = 3306, database = "fiches_robot_bd")
-        self.cursor = robot_db.cursor()
-    
-    def config_commande(self, config_val = ()):
-        config_sql = ("INSERT INTO fiche_config VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
-        cursor.execute(config_sql, config_val)
+class DataBase:
+    robot_db = mysql.connector.connect(host = "127.0.0.1", user = "root", password = "EnovaRobotics123", port = 3306, database = "fiches_robot_bd")
+    cursor = robot_db.cursor()
+
+    def config_4G_commande(self, config_val = ()):
+        config_sql = ("INSERT INTO fiche_config_4G VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+        self.cursor.execute(config_sql, config_val)
         self.robot_db.commit()
         
-    def install_commande(self, install_val = ()):
-        install_sql = ('INSERT INTO fiche_install VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)')
-        cursor.execute(install_sql, install_val)
+    def config_camera_commande(self, config_val = ()):
+        config_sql = ("INSERT INTO fiche_config_cam VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+        self.cursor.execute(config_sql, config_val)
+        self.robot_db.commit()
+    '''    
+    def config_controlleur_commande(self, config_val = ()):
+        config_sql = ("INSERT INTO fiche_config_controlleur VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+        self.cursor.execute(config_sql, config_val)
+        self.robot_db.commit()
+'''
+    def install_commande(self, install_val = list()):
+        install_sql = ('INSERT INTO fiche_install_img_disque VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)')
+        self.cursor.execute(install_sql, install_val)
         self.robot_db.commit()
         
     def fab_commande(self, fab_val = ()):
         fab_sql = ('INSERT INTO fiche_fab VALUES (%s, %s, %s, %s, %s, %s, %s, %s)')
-        cursor.execute(fab_sql, fab_val)
+        self.cursor.execute(fab_sql, fab_val)
         self.robot_db.commit()
         
     def show(self, txt):
