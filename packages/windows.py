@@ -1,73 +1,71 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
+from PIL import ImageTk, Image
+
 
 class Window:
     def __init__(self, master):
         self.master = master
-        self.master ['bg'] = 'light grey'
-        
-    def frame1(self, master, bg = 'gray1', bw = 0.2, r = GROOVE, s = TOP):
-        self.frame1 = Frame(self.master, background = bg, borderwidth = bw, relief = r)
-        return self.frame1
-
-    def frame(self, master, x, y, bg = 'gray1', bw = 0.2, r = GROOVE, s = TOP):
-        self.frame = Frame(self.master, background = bg, borderwidth = bw, relief = r)
-        self.frame.pack(side = s, padx = x, pady = y)
-        return self.frame
-        
-    def label(self, frame, texte = '', r = 0, c = 0, h = 1, w = 30, fg = 'gray1', bg = 'turquoise4', an = W): 
-        self.label = Label(frame, height = h ,width = w, text = texte, foreground = fg, background = bg, anchor = an) 
-        self.label.grid(row = r, column = c) 
-        return self.label 
-        
-    def entry(self, frame, r = 0, c = 0, w = 50, bg = 'old lace', j = CENTER, rf = FLAT): 
-        self.entry = Entry(frame, width = w, background = bg, justify = j, relief = rf) 
-        self.entry.grid(row = r, column = c)
-        return self.entry
+        self.configure_gui()
     
-    def button(self, master, cmd, param, x, y, txt = 'Enter'):
-        self.button = Button(master, text = txt, command = lambda : cmd(param))
-        self.button.pack(padx = x, pady = y)
-        return self.button 
+    
+    def configure_gui(self):
+        self.master ['bg'] = 'grey94'
+        self.logo(self.master)
+        self.master.geometry('830x470')
         
-    def button1(self, master, cmd, param1, param2, x = 2, y = 45, txt = 'Entrer'):
-        self.button1 = Button(master, text = txt, command = lambda: cmd (param1, param2))
-        self.button1.pack(padx = x, pady = y)
-        return self.button1 
         
+    def label(self, frame, texte = '', x = 0, y = 0): 
+        self.label = Label(frame, height = 1 ,width = 25, text = texte, foreground = 'gray16', background = 'medium sea green', anchor = NW, font= ('Arial', 12)) 
+        self.label.place(x = x, y = y) 
+        return self.label
+        
+    
+    def entry(self, master, x = 0, y = 0): 
+        self.entry = Entry(master, borderwidth = 2, width = 40, background = 'grey84', justify = CENTER, font= ('Arial', 12), relief = FLAT) 
+        self.entry.place(x = x, y = y)
+        return self.entry
+        
+        
+    def button(self, master, cmd, x = 0, y = 0, txt = 'Entrer'):
+        button = Button(master, text = txt, font = ('Arial', 10), foreground = 'sea green', background = 'grey86')
+        def commande():
+            cmd()
+            button['state'] = DISABLED
+        button['command'] = commande
+        button.place(x = x, y = y)
+    
+    
+    def button_with_param(self, master, cmd, param, x = 0, y = 0, txt = 'Entrer', fg = 'gray16'):
+        button = Button(master, text = txt, font = ('Arial', 10), foreground = fg, background = 'grey86')
+        def commande():
+            cmd(param)
+            button['state'] = DISABLED
+        button['command'] = commande
+        button.place(x = x, y = y)
+
+    def info_button(self, master, x, y, txt):
+        self.photo = Image.open(r'C:\Users\Asus\Documents\GitHub\Enova-Application\packages\info.png')
+        self.photo = self.photo.resize((20,20), Image.ANTIALIAS)
+        self.photoi = ImageTk.PhotoImage(self.photo)
+        def commande():
+            window = Toplevel()
+            window.title(' ')
+            Label(window, text = txt, justify = LEFT).pack()
+            button['state'] = DISABLED
+        button = Button(master, image = self.photoi, command = commande)
+        button.place(x = x, y = y)
+
     def combobox(self, master, val = [], x = 0, y = 0, var = ''):
-        self.combobox = ttk.Combobox(self.master, values = val, textvariable = var)
-        self.combobox.pack(padx = x, pady = y)
+        self.combobox = ttk.Combobox(self.master, values = val, textvariable = var, font= ('Arial', 10))
+        self.combobox.place(x = x, y = y)
         return self.combobox
-
-    def combobox1(self, master, val = [], x = 0, y = 0, var = ''):
-        self.combobox = ttk.Combobox(self.master, values = val, textvariable = var)
-        self.combobox.grid(row = x, column = y)
-        return self.combobox
-	
-class PrincipalWindow (Window):
-	''' 
-	principal window
-	inherites from class window 
-	'''
-
-	def __init__(self, master):
-		Window.__init__(self, master)
-		self.master.title('Fenetre principale')
-
-		self.frame1 = PrincipalWindow.frame(self, self.master, 5, 5) 
-		self.frame2 = PrincipalWindow.frame(self, self.master, 5, 11) 
-
-		self.label1 = PrincipalWindow.label(self, self.frame1,'Nom du robot', 0, 0)
-		self.label2 = PrincipalWindow.label(self, self.frame2,'Version du robot', 1, 0)
-
-		self.entry1 = PrincipalWindow.entry(self, self.frame1, 0, 1)
-		self.entry2 = PrincipalWindow.entry(self, self.frame2, 1, 1)
-		
-		self.frame3 = PrincipalWindow.frame(self, self.master, 5, 20, 'light gray') 
-		self.frame4 = PrincipalWindow.frame(self, self.master, 5, 20, 'light gray') 
-
-	def window_button(self, frame, texte, com, txt):
-		self.button = Button(self.frame, text = texte, command = lambda : com(txt))
-		self.button.pack()
-		return self.button
+    
+    
+    def logo(self, master):
+        self.img = Image.open(r"C:\Users\Asus\Documents\GitHub\Enova-Application\packages\enova.png")
+        self.img = self.img.resize((200,50), Image.ANTIALIAS)
+        self.photoimg = ImageTk.PhotoImage(self.img)
+        self.imagelabel = Label(self.master, image = self.photoimg)
+        self.imagelabel.place(x = 10, y = 10)
